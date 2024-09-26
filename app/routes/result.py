@@ -11,11 +11,15 @@ def result():
         with Session.begin() as session:
             result = session.execute(select(Coding.date, Coding.hours, Coding.description)).all()
         
+        if not result:
+            print("No data found.")
+            return render_template('result.html', result=[])
+
         results = [{'date': row[0], 'hours': row[1], 'description': row[2]} for row in result]
-        print(results)
-        return render_template('result.html', values=results)
+        
+        print("Results: ", results)
+        return render_template('result.html', result=results)
     
     except Exception as e:
         print(f"Error: {e}")
         return "An error occurred", 500
-
